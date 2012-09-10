@@ -8,41 +8,48 @@ of the FFT algorithm in the package numpy.fft is indeed O(nlog_2(n)).
 
 """
 from numpy import *
+from objTimer import *
+
 class assignmentOne():
     isTimed = False
     
-    def __init__(self):
-        pass
-    
-    def timer(self):
-        import time
-        if self.isTimed:
-            stopTime    = time.clock()
-            totalTime   = stopTime = self.startTime
-            print 'Total runtime: '+ str(totalTime) + ' seconds'
-            return totalTime
-        else:
-            self.startTime  = time.clock()
-            self.isTimed = True
+    def __init__(self, samples):
+        import numpy.random as r
+        self.s = r.random(samples)
+        
+        timeIt = timer()
+        timeIt()
+        self.fftSim(samples)
+        timeIt()
+        print timeIt
+        
     
     def fftSim(self,samples):
-        import numpy.random
-        s = random(samples)
-        F = fft.rfft(s)
-        m = samples/2
-        p = lambda z: (abs(real(z))/m,abs(imag(z))/m)
-        t = p(F)
+        self.F = fft.rfft(self.s)
+        self.m = samples/2
+        p = lambda z: (abs(real(z))/self.m,abs(imag(z))/self.m)
+        self.t = p(self.F)
         tol = 1.0e-8
-        for i in range(0,len(t[0])):
-            str(t[0][i]) if t[0][i] >= tol
-            str(t[1][i]) if t[1][i] >= tol
+        #for i in range(0,len(self.t[0])):
+            #if self.t[0][i] >= tol: print str(self.t[0][i]) 
+            #if self.t[1][i] >= tol: print str(self.t[1][i]) 
+            #pass
+    
+    def plotIt(self):
+        import matplotlib.pyplot as plt
+        plt.plot(abs(self.F)/self.m)
+        plt.show()
 
 if __name__ == '__main__':
+    import matplotlib.pyplot as plt
     """
     This is the testing block of code
     """
-    first = assignmentOne()
-    start = first.timer()
-    end = first.timer()
-
-        
+    z = []
+    x = arange(10000,20001,10000)
+    print x
+    z = [assignmentOne(i) for i in x]
+    
+    
+    #plt.plot(x,y)
+    #plt.show()

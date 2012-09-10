@@ -4,9 +4,13 @@ class timer():
     
     def __init__(self):
         pass
-        
+    
+    def __new__(self):
+        pass
+    
     def __call__(self):
-        self.timer()
+        return self.timer()
+        
     
     def __str__(self):
         string = 'Total runtime: '+ str(self.totalTime) + ' seconds'
@@ -15,25 +19,29 @@ class timer():
     def timer(self):
         import time
         if self.isTimed:
+            print 'Stop Timer...'
             stopTime    = time.clock()
-            self.totalTime   = stopTime = self.startTime
+            self.totalTime   = stopTime - self.startTime
+            return self.totalTime
             
         else:
+            print 'Start Timer...'
             self.startTime  = time.clock()
             self.isTimed = True
-    
-tim = timer()
+            return 0.0
 
-tim()
-
-tim()
-
-print tim
-
-jon = timer()
-jon()
-for i in range(100000000):
-    pass
-jon()
-
-print jon
+if __name__ == '__main__':
+    tim = timer()
+    tim()
+    tim()
+    print tim
+    jon = timer()
+    jon()
+    for i in range(10000000):
+        pass
+    jon()
+    print jon
+    moo = timer()
+    moo()
+    moo()
+    print moo
