@@ -99,9 +99,10 @@ if __name__ == '__main__':
     a.writeCSV()
 
 
-# Calcuate the raw expected times, then the fitted expected times
+# Calcuate the raw expected times, then the fitted expected times and plot
 from math import log
 from scipy.optimize import leastsq
+import matplotlib.pyplot as plt
 
 expected=array([log(i,2.0)*i for i in a.x])
 observed=a.times
@@ -115,6 +116,14 @@ p0=.001
 
 W=leastsq(residuals, p0, args=(observed, expected), maxfev=100000, full_output=1)
 
+# Plot both the actual and expected adjusted lines next to each other
+expected_adjusted=[W[1]*expected[i] for i in range(len(expected))]
+
+p1=plt.plot(a.x,a.times,'b:', label='Actual Times')
+p2=plt.plot(a.x,a.times,'r--', label='Expected Times')
+plt.legend(['Actual', 'Expected'], loc='upper left')
+
+plt.show()
 
 
 
