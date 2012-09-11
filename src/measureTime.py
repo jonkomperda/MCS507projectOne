@@ -13,6 +13,9 @@ from objTimer import *
 class assignmentOne():
     times = []
     def __init__(self, startSample, endSample, n):
+    """
+        Constructor for the assignment
+    """
         self.start  = startSample
         self.end    = endSample
         self.count  = int((endSample-startSample)/n)
