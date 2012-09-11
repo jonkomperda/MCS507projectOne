@@ -11,45 +11,59 @@ from numpy import *
 from objTimer import *
 
 class assignmentOne():
-    isTimed = False
-    
-    def __init__(self, samples):
-        import numpy.random as r
-        self.s = r.random(samples)
+    times = []
+    def __init__(self, startSample, endSample, n):
+        self.start  = startSample
+        self.end    = endSample
+        self.count  = int((endSample-startSample)/n)
         
-        timeIt = timer()
-        timeIt()
-        self.fftSim(samples)
-        timeIt()
-        print timeIt
+        self.mainLoop()
         
-    
-    def fftSim(self,samples):
-        self.F = fft.rfft(self.s)
-        self.m = samples/2
-        p = lambda z: (abs(real(z))/self.m,abs(imag(z))/self.m)
-        self.t = p(self.F)
-        tol = 1.0e-8
-        #for i in range(0,len(self.t[0])):
-            #if self.t[0][i] >= tol: print str(self.t[0][i]) 
-            #if self.t[1][i] >= tol: print str(self.t[1][i]) 
-            #pass
-    
-    def plotIt(self):
+    def mainLoop(self):
+        import numpy.random as rand
+        self.x = x = arange(self.start, self.end, self.count)
+        
+        timed = timer()
+        
+        for i in x:
+            signal = rand.random(i)
+            timed()
+            self.fftCalc(signal)
+            t = timed()
+            self.times.append(t)
+            
+        print self.times
+        
+    def fftCalc(self,signal):
+        self.F = fft.rfft(signal)
+        #self.m, m = len(signal)/2, len(signal)/2
+        #p = lambda z: (abs(real(z))/m,abs(imag(z))/m)
+        #self.t = p(self.F)
+        
+    def plotFFT(self):
         import matplotlib.pyplot as plt
         plt.plot(abs(self.F)/self.m)
         plt.show()
-
+    
+    def plotTimes(self):
+        import matplotlib.pyplot as plt
+        #nlog2y = [i for i in self.x*(log(self.x)/log(2.0))]
+        
+        plt.plot(self.x,self.times)
+        plt.show()
+        
+    def writeCSV(self):
+        import csv
+        writer = csv.writer(open('timings.csv', 'wb'), delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        writer.writerow(['Samples,Time'])
+        for i in range(len(self.times)):
+            writer.writerow([self.x[i],self.times[i]])
+        
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
-    """
-    This is the testing block of code
-    """
-    z = []
-    x = arange(10000,20001,10000)
-    print x
-    z = [assignmentOne(i) for i in x]
+    a = assignmentOne(256,256000,100)
+    a.plotTimes()
     
-    
-    #plt.plot(x,y)
+    #plt.plot(a.x,a.times)
     #plt.show()
+    a.writeCSV()

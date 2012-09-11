@@ -11,7 +11,6 @@ class timer():
     def __call__(self):
         return self.timer()
         
-    
     def __str__(self):
         string = 'Total runtime: '+ str(self.totalTime) + ' seconds'
         return string
@@ -22,12 +21,14 @@ class timer():
             print 'Stop Timer...'
             stopTime    = time.clock()
             self.totalTime   = stopTime - self.startTime
+            self.isTimed = False
             return self.totalTime
             
         else:
             print 'Start Timer...'
             self.startTime  = time.clock()
             self.isTimed = True
+            self.totalTime = 0
             return 0.0
 
 if __name__ == '__main__':
@@ -45,3 +46,6 @@ if __name__ == '__main__':
     moo()
     moo()
     print moo
+    
+    a = tim()
+    print a
