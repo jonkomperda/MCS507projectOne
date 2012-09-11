@@ -12,13 +12,13 @@ from objTimer import *
 
 class assignmentOne():
     times = []
-    def __init__(self, startSample, endSample, n):
+    def __init__(self, startSample, iterations, n):
 
         #Constructor for the assignment
 
         self.start  = startSample
-        self.end    = endSample
         #self.count  = int((endSample-startSample)/n)
+        self.loops= iterations
         self.count  = n
         
         self.mainLoop()
@@ -39,15 +39,20 @@ class assignmentOne():
         f = lambda t: 2*cos(4*2*pi*t) + 5*sin(10*2*pi*t)
         total_signal=f(data_seed)
         timed = timer()
+
+        # I think we may need to loop this some more
         
         for i in x:
-            #signal = rand.random(i)
-            #signal=f(arange(0.0,1.0,1.0/i))
-            signal=total_signal[:i]
             timed()
-            self.fftCalc(signal)
+            for j in range(1,self.loops):
+                #signal = rand.random(i)
+                #signal=f(arange(0.0,1.0,1.0/i))
+                self.signal=total_signal[:i]
+                self.fftCalc(self.signal)
             t = timed()
             self.times.append(t)
+            
+            
             
         print self.times
         
@@ -75,17 +80,44 @@ class assignmentOne():
         writer.writerow(['Samples,Time'])
         for i in range(len(self.times)):
             writer.writerow([self.x[i],self.times[i]])
-        #writer.flush()
-        #writer.close
+       
+        
+        
+        
+        
         
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
     #a = assignmentOne(256,256000,100)
     #a = assignmentOne(256,256*10**2,100)
-    a = assignmentOne(256,9999,10)
+    a = assignmentOne(256,1000,10)
     a.plotTimes()
     
     #plt.plot(a.x,a.times)
     #plt.show()
     #a.plotFFT()
     a.writeCSV()
+
+
+# Calcuate the raw expected times, then the fitted expected times
+from math import log
+from scipy.optimize import leastsq
+
+expected=array([log(i,2.0)*i for i in a.x])
+observed=a.times
+
+def residuals(alpha,observed,expected):
+    #resid=observed-alpha*expected
+    #return resid
+    return observed-alpha*expected
+
+p0=.001
+
+W=leastsq(residuals, p0, args=(observed, expected), maxfev=100000, full_output=1)
+
+
+
+
+
+
+
