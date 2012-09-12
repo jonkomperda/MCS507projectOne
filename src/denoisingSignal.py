@@ -1,5 +1,6 @@
 from scipy.io import wavfile
 from numpy import *
+#from scitools.sound import write
 import matplotlib.pyplot as plt
 
 inFile = './static_noise_test.wav'
@@ -10,14 +11,19 @@ soundArray = w[1]
 
 F = fft.rfft(soundArray)
 
-def filt(x): return x >= 1000000 #this is the filter function
+def filt(x): return x >= 400000 #this is the filter function
 
 out = filter(filt,F)
 
-plt.plot(out,'r--')
-plt.show()
+iF = fft.irfft(out)
+print iF
+iF = array( [int(x) for x in iF ])
+print type(iF)
 
-wavfile.write('outfile.wav',44100,out)
+#plt.plot(out,'r--')
+#plt.show()
+
+wavfile.write('outfile.wav',44100,iF)
 
 
 #print [i for i in array]
