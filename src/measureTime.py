@@ -13,16 +13,16 @@ from objTimer import *
 class assignmentOne():
     times = []
     def __init__(self, startSample, iterations, n):
-
+        
         #Constructor for the assignment
-
         self.start  = startSample
         #self.count  = int((endSample-startSample)/n)
         self.loops= iterations
         self.count  = n
         
         self.mainLoop()
-        
+    
+    
     def mainLoop(self):
         import numpy.random as rand
         # Array containing the number of samples to compute
@@ -39,7 +39,7 @@ class assignmentOne():
         f = lambda t: 2*cos(4*2*pi*t) + 5*sin(10*2*pi*t)
         total_signal=f(data_seed)
         timed = timer()
-
+        
         # I think we may need to loop this some more
         
         for i in x:
@@ -52,20 +52,21 @@ class assignmentOne():
             t = timed()
             self.times.append(t)
             
-            
-            
         print self.times
-        
+    
+    
     def fftCalc(self,signal):
         self.F = fft.rfft(signal)
         #self.m, m = len(signal)/2, len(signal)/2
         #p = lambda z: (abs(real(z))/m,abs(imag(z))/m)
         #self.t = p(self.F)
-        
+    
+    
     def plotFFT(self):
         import matplotlib.pyplot as plt
         plt.plot(abs(self.F)/self.m)
         plt.show()
+    
     
     def plotTimes(self):
         import matplotlib.pyplot as plt
@@ -73,32 +74,56 @@ class assignmentOne():
         
         plt.plot(self.x,self.times)
         plt.show()
-        
+    
+    
     def writeCSV(self):
         import csv
         writer = csv.writer(open('timings.csv', 'wb'), delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(['Samples,Time'])
         for i in range(len(self.times)):
             writer.writerow([self.x[i],self.times[i]])
-       
         
+    
+    
+    def findExact(self):
+        """
+        Calcuate the raw expected times, then the fitted expected times and plot
+        """
+        from math import log
+        from scipy.optimize import leastsq
+        import matplotlib.pyplot as plt
         
+        expected = array([log(i,2.0)*i for i in self.x])
+        observed = self.times
         
+        def residuals(alpha,observed,expected):
+            return observed-alpha*expected
         
+        p0=.001
+        W = leastsq(residuals,p0,args=(observed,expected), maxfev=100000, full_output=1)
         
+        expected_adjusted = [W[1]*expected[i] for i in range(len(expected))]
+        
+        p1 = plt.plot(self.x,self.times,'b:',label='Actual Times')
+        p2 = plt.plot(self.x,self.times,'r--', label='Expected Times')
+        plt.legend(['Actual','Expected'], loc='upper left')
+        plt.show()
+
+
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
     #a = assignmentOne(256,256000,100)
     #a = assignmentOne(256,256*10**2,100)
     a = assignmentOne(256,1000,10)
     a.plotTimes()
+    a.findExact()
     
     #plt.plot(a.x,a.times)
     #plt.show()
     #a.plotFFT()
     a.writeCSV()
 
-
+"""
 # Calcuate the raw expected times, then the fitted expected times and plot
 from math import log
 from scipy.optimize import leastsq
@@ -124,7 +149,7 @@ p2=plt.plot(a.x,a.times,'r--', label='Expected Times')
 plt.legend(['Actual', 'Expected'], loc='upper left')
 
 plt.show()
-
+"""
 
 
 
