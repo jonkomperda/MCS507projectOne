@@ -1,33 +1,50 @@
-from scipy.io import wavfile
-from numpy import *
-from scitools.sound import *
-import matplotlib.pyplot as plt
+def plotIt(data):
+    import matplotlib.pyplot as plt
+    plt.plot(data)
+    plt.show()
 
-inFile = './static_noise_test.wav'
+def readTone():
+    from scipy.io import wavfile
+    
+    inFile = './static_noise_test.wav'
+    
+    tone = wavfile.read(inFile)
+    return tone[1]
+    
+def writeTone(data):
+    from scitools.sound import write
+    
+    write(data,'meow.wav')
 
-w = wavfile.read(inFile) #index 0 is sample rate, 1 is array, 2 is dtype
-
-soundArray = w[1]
-
-F = fft.rfft(soundArray)
-
-def filt(x): 
-    if abs(x) >= 10000:
-        return x #this is the filter function
-    else:
-        return 0
-
-out = filter(filt,F)
-#out = F
-iF = fft.irfft(out)
-print iF
-iF = array( [int(x) for x in iF ])
-print type(iF)
-
-#plt.plot(out,'r--')
-#plt.show()
-
-play(iF)
-
-
-#print [i for i in array]
+if __name__ == '__main__':
+    from numpy import *
+    
+    tone = readTone()
+    n = len(tone)
+    m = len(tone)/2
+    print len(tone)
+    F = fft.rfft(tone)
+    
+    p = lambda z: (abs(real(z)),abs(imag(z)))
+    temp = p(F)
+    
+    plotIt(temp[0][:])
+    
+    for i in range(len(temp[0][:])):
+        if temp[0][i] <= 40000:
+            F[i] = 0
+        if temp[1][i] <= 100000:
+            F[i] = 0
+        if i < 300:
+            F[i] = 0
+        if i > 10000:
+            F[i] = 0
+    plotIt(F)
+    
+    out = temp[0][:] + imag(temp[1][:])
+    print out
+    
+    result = fft.irfft(F)
+    #print len(result)
+    #plotIt(temp)
+    writeTone(result)
