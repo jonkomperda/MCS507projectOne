@@ -4,3 +4,11 @@
 *.pyc
 
 *.csv
+
+tex/main.pdf
+
+tex/main.log
+
+tex/main.synctex.gz
+
+tex/main.aux
