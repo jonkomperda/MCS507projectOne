@@ -107,6 +107,9 @@ class assignmentOne():
         p1 = plt.plot(self.x,self.times,'b:',label='Actual Times')
         p2 = plt.plot(self.x,self.expected_adjusted,'r--', label='Expected Times')
         plt.legend(['Actual','Expected'], loc='upper left')
+        plt.title('Actual vs. Expected Times')
+        plt.xlabel('Observations')
+        plt.ylabel('Time (seconds)')
         plt.show()
 
 
