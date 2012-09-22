@@ -16,35 +16,32 @@ def writeTone(data):
     
     write(data,'meow.wav')
 
+def filterFFT(data,ampfiltreal=40000,ampfiltimag=100000,highpass=300,lowpass=10000):
+    p = lambda z: (abs(real(z)),abs(imag(z)))
+    temp = p(data)
+    
+    for i in range(len(temp[0][:])):
+        if temp[0][i] <= ampfiltreal:
+            data[i] = 0
+        else:
+            data[i] *= 10
+        if temp[1][i] <= ampfiltimag:
+            data[i] = 0
+        if i < highpass:
+            data[i] = 0
+        if i > lowpass:
+            data[i] = 0
+    return data
+
 if __name__ == '__main__':
     from numpy import *
     
     tone = readTone()
-    n = len(tone)
-    m = len(tone)/2
-    print len(tone)
+
     F = fft.rfft(tone)
-    
-    p = lambda z: (abs(real(z)),abs(imag(z)))
-    temp = p(F)
-    
-    plotIt(temp[0][:])
-    
-    for i in range(len(temp[0][:])):
-        if temp[0][i] <= 40000:
-            F[i] = 0
-        if temp[1][i] <= 100000:
-            F[i] = 0
-        if i < 300:
-            F[i] = 0
-        if i > 10000:
-            F[i] = 0
-    plotIt(F)
-    
-    out = temp[0][:] + imag(temp[1][:])
-    print out
-    
+
+    F = filterFFT(F)
+
     result = fft.irfft(F)
-    #print len(result)
-    #plotIt(temp)
+
     writeTone(result)
