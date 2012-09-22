@@ -18,12 +18,11 @@ import matplotlib.pyplot as plt
 from math import log
 from scipy.optimize import leastsq
 
-def residuals(alpha,observed,expected):
-            return observed-alpha*expected
+
 
 
 # Number of iterations
-n=200
+r=200
 
 # Number of observations to test
 start=5
@@ -51,13 +50,13 @@ times1=[]
 timed=timer()
 for i in x:
     timed()
-    for j in range(1,n):
+    for j in range(1,r):
         np.convolve(a[:i],b[:i])
     t=timed()
     times1.append(t)
     
-plt.plot(x,times1)
-plt.show()        
+##plt.plot(x,times1)
+##plt.show()        
 
 
 times2=[]
@@ -65,17 +64,21 @@ times2=[]
 timed=timer()
 for i in x:
     timed()
-    for j in range(1,n):
+    for j in range(1,r):
         fftconvolve(a[:i],b[:i])
     t=timed()
     times2.append(t)
 
 
 
-plt.plot(x,times2)
-plt.show()
+##plt.plot(x,times2)
+##plt.show()
 
 # Calc expected times for convolve
+def residuals(alpha,observed,expected):
+            return observed-alpha*expected
+
+        
 expected1 = np.array([i**2 for i in x])
 observed1 = times1
 p0=.001
@@ -97,7 +100,6 @@ plt.show()
 expected2 = np.array([log(i,2.0)*i for i in x])
 observed2 = times2
 p0=.001
-# Note: it looks like I need to add an intercept term here
 W = leastsq(residuals,p0,args=(observed2,expected2), maxfev=100000, full_output=1)
 expected_adjusted2 = [float(W[0])*expected2[i] for i in range(len(expected2))]
 
@@ -110,6 +112,22 @@ plt.ylabel('Time (seconds)')
 plt.show()
 
 
+p1 = plt.plot(x[5:],times2[5:],'b:',label='Actual Times')
+p2 = plt.plot(x[5:],expected_adjusted2[5:],'r--', label='Expected Times')
+plt.legend(['Actual','Expected'], loc='upper left')
+plt.title('Convolve (FFT) Actual vs. Expected Times')
+plt.xlabel('Observations')
+plt.ylabel('Time (seconds)')
+plt.show()
+
+
+p1 = plt.plot(x[:10],times2[:10],'g:',label='FFT Times')
+p2 = plt.plot(x[:10],times1[:10],'y--', label='Non-FFT Times')
+plt.legend(['FFT Times','Non-FFT Times'], loc='upper left')
+plt.title('Convolve (FFT) Actual vs. Expected Times')
+plt.xlabel('Observations')
+plt.ylabel('Time (seconds)')
+plt.show()
     
 
 
