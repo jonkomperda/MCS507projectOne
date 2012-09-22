@@ -102,10 +102,10 @@ class assignmentOne():
         p0=.001
         W = leastsq(residuals,p0,args=(observed,expected), maxfev=100000, full_output=1)
         
-        expected_adjusted = [W[1]*expected[i] for i in range(len(expected))]
+        self.expected_adjusted = [W[0]*expected[i] for i in range(len(expected))]
         
         p1 = plt.plot(self.x,self.times,'b:',label='Actual Times')
-        p2 = plt.plot(self.x,self.times,'r--', label='Expected Times')
+        p2 = plt.plot(self.x,self.expected_adjusted,'r--', label='Expected Times')
         plt.legend(['Actual','Expected'], loc='upper left')
         plt.show()
 
@@ -114,14 +114,14 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt
     #a = assignmentOne(256,256000,100)
     #a = assignmentOne(256,256*10**2,100)
-    a = assignmentOne(256,1000,10)
+    a = assignmentOne(256,300,10)
     a.plotTimes()
     a.findExact()
     
     #plt.plot(a.x,a.times)
     #plt.show()
     #a.plotFFT()
-    a.writeCSV()
+    #a.writeCSV()
 
 """
 # Calcuate the raw expected times, then the fitted expected times and plot
