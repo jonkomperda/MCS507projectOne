@@ -17,7 +17,7 @@ We begin by loading a sample wave file using the scipy 'wavfile' module.
         tone = wavfile.read(inFile)
         return tone[1]
 \end{lstlisting}
-Listing \ref{lst:readsound} depicts the flow of loading the sound file. We first use 'wavfile' to read the file, however we only return the second row of the list, which contains our sound data.
+Listing \ref{lst:readsound} depicts the flow of loading the sound file. We first use \emph{wavfile} to read the file, however we only return the second row of the list, which contains our sound data.
 
 Once the sound data is stored in a numpy array, we then apply the real FFT to our sound data.
 \begin{figure}[H]
@@ -33,7 +33,7 @@ We begin by splitting the result of the FFT:
     p = lambda z: (abs(real(z)),abs(imag(z)))
     temp = p(data)
 \end{lstlisting}
-Listing \ref{lst:split} splits the spectrum into real and imaginary components. This is done by applying the lambda function 'p', then storing the result in a temporary array.
+Listing \ref{lst:split} splits the spectrum into real and imaginary components. This is done by applying the lambda function \emph{p}, then storing the result in a temporary array.
 
 We then apply a loop which filters the data.
 \begin{lstlisting}[caption={Filter Application},label=lst:filter,firstnumber=21]

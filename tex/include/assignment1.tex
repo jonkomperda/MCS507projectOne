@@ -1,0 +1,38 @@
+%!TEX root = ../main.tex
+% file: assignment2.tex
+
+\section{Assignment One: Measuring the CPU Time} % (fold)
+\label{sec:measuring_the_cpu_time}
+Our first goal is to determine whether the Fast Fourier Transform (FFT) package of \emph{numpy} carries a computational time proportional to $\mathcal{O}(n log_2(n))$. The script operates on a set of predetermined random data of base two size, doubling it's size for each iteration. We shall use the \emph{time} module of Python for timing the FFT, then use the method of least squares to determine the expected time. A comparison plot of the FFT timings vs. $\mathcal{O}(n log_2(n))$ is provided.
+
+\subsection{Method} % (fold)
+\label{sub:methoda}
+To simplify the timing of this project, a class was created for the timer to track executions on our behalf.
+\begin{lstlisting}[caption={Timer Class},label=lst:timeclass,firstnumber=1]
+    class timer():
+\end{lstlisting}
+This timer is held within the \emph{objTimer.py} file and reused in various places within the project. Rather than keeping track of timer variables and starting/stopping the timer, we simply call the object which tracks it's own execution.
+\begin{lstlisting}[caption={Quantity of Samples to Compute},label=lst:samples,firstnumber=32]
+    self.x = x = array([(2**j)*self.start for j in range(self.count+1)])
+\end{lstlisting}
+The quantity of samples to compute is done by list comprehension as seen in Listing \ref{lst:samples}. The user inputs a start quantity, which is then doubled for a predetermined range. It is then stored within the class as well as locally for use in the function.
+\begin{lstlisting}[caption={Random Number Generation},label=lst:rand,firstnumber=36]
+    data_seed=rand.random(max(self.x))
+\end{lstlisting}
+The random numbers are generated prior to the execution of the loop based on the greatest number of samples we wish to compute. This is done in advance to ensure that such random number generation does not pollute our timing results as it may be computationally intensive. Once the random data is generated and our timer object is initialized, we execute the main loop to time our executions.
+
+\begin{lstlisting}[caption={Main Loop Execution},label=lst:mainloop,firstnumber=45]
+    for i in x:
+        timed()
+        for j in range(1,self.loops):
+            self.signal=total_signal[:i]
+            self.fftCalc(self.signal)
+        t = timed()
+        self.times.append(t)
+\end{lstlisting}
+In Listing \ref{lst:mainloop} we iterate over length of the array where \emph{i} is the quantity of samples we wish to take. The object \emph{timed()} is called to zero out the counter and begin counting. The value is not stored as we do not wish to store a zero. We then perform the FFT calculation, and call our timer, \emph{timed()}, once again, this time storing the result to the variable \emph{t}. The times are appended to the list \emph{self.times}, which will be plotted later using \emph{matplotlib}.
+
+
+% subsection method (end)
+
+% section section_name (end)
