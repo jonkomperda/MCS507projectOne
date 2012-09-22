@@ -1,0 +1,76 @@
+%!TEX root = ../main.tex
+% file: assignment2.tex
+
+\section{Assignment Three: Convolve Times} % (fold)
+\label{sec:assignment_three_convolve_times}
+
+In this section, we illustrate how one can use the FFT to transform a convolution into a componentwise product. This transforms the operation from O(n^2) to O(n \log_2(n)). 
+
+We verify this order by timing how long it takes to perform convolution without FFT and then comparing that with the time it takes to perform convolution using FFT. We repeat this process a number of times using the same vectors to obtain more robust results. We also then repeat this process for various values of n.
+
+
+\subsection{Method} % (fold)
+\label{sub:method}
+
+We begin by specifying a starting number of observations to test. We then create an list of observations to test by doubling the original number of observations a specified amount of times. 
+
+
+\begin{lstlisting}[caption={Creating a list of n observations to test},label=lst:example,firstnumber=65]
+# Number of observations to test
+start=5
+count=10
+x = np.array([(2**j)*start for j in range(count+1)])
+\end{lstlisting}
+
+Next we generate random coefficient vectors for the two polynomials. Note that when performing convolution using the fftconvolve function from the scipy.signal module, it is unnecessary to pad with zeros. This is explicitly demonstrated later.
+
+\begin{lstlisting}[caption={Generating Coefficient Vectors},label=lst:example,firstnumber=65]
+# Generate random vectors 
+a=np.array([random.randint(0,10) for i in range(1,max(x))])
+b=np.array([random.randint(0,10) for i in range(1,max(x))])
+\end{lstlisting}
+
+We then repeatedly perform the convolutions without FFT using slices from the original coefficient vectors and measure the amount of time the calculation takes. We then increase the number of observations and repeat that process. Calculation times are appended to a list.
+
+\begin{lstlisting}[caption={Convolution without FFT},label=lst:example,firstnumber=65]
+times1=[]
+
+timed=timer()
+for i in x:
+    timed()
+    for j in range(1,n):
+        np.convolve(a[:i],b[:i])
+    t=timed()
+    times1.append(t)
+\end{lstlisting}
+ 
+ We then repeat this process but instead performing the convolutions with FFT.
+
+\begin{lstlisting}[caption={Convolution with FFT},label=lst:example,firstnumber=65]
+times2=[]
+
+timed=timer()
+for i in x:
+    timed()
+    for j in range(1,n):
+        fftconvolve(a[:i],b[:i])
+    t=timed()
+    times2.append(t)
+\end{lstlisting}
+
+Lastly, to verify that the calculation times for the convolutions with FFT and without FFT are of the specified orders, we calculate the proportionality constant by finding the constant that minimizes the residual sum of squares. This is used to determine what times one would expect for that order and value of n.
+
+\begin{lstlisting}[caption={Calculating the proportionality constants},label=lst:example,firstnumber=65]
+def residuals(alpha,observed,expected):
+            return observed-alpha*expected
+            
+# Calc expected times for convolve
+expected1 = np.array([i**2 for i in x])
+observed1 = times1
+p0=.001
+
+W = leastsq(residuals,p0,args=(observed1,expected1), maxfev=100000, full_output=1)
+expected_adjusted1 = [float(W[0])*expected1[i] for i in range(len(expected1))]
+\end{lstlisting}
+
+% subsection method (end) 

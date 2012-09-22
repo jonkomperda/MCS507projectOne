@@ -36,6 +36,15 @@ x = np.array([(2**j)*start for j in range(count+1)])
 a=np.array([random.randint(0,10) for i in range(1,max(x))])
 b=np.array([random.randint(0,10) for i in range(1,max(x))])
 
+##a=[random.randint(0,10) for i in range(1,5)]
+##for i in range(1,5):
+##    a.append(0)
+##
+##b=[random.randint(0,10) for i in range(1,5)]
+##for i in range(1,5):
+##    b.append(0)
+
+
 
 times1=[]
 
@@ -77,6 +86,9 @@ expected_adjusted1 = [float(W[0])*expected1[i] for i in range(len(expected1))]
 p1 = plt.plot(x,times1,'b:',label='Actual Times')
 p2 = plt.plot(x,expected_adjusted1,'r--', label='Expected Times')
 plt.legend(['Actual','Expected'], loc='upper left')
+plt.title('Convolve (Non-FFT) Actual vs. Expected Times')
+plt.xlabel('Observations')
+plt.ylabel('Time (seconds)')
 plt.show()
 
 
@@ -92,6 +104,9 @@ expected_adjusted2 = [float(W[0])*expected2[i] for i in range(len(expected2))]
 p1 = plt.plot(x,times2,'b:',label='Actual Times')
 p2 = plt.plot(x,expected_adjusted2,'r--', label='Expected Times')
 plt.legend(['Actual','Expected'], loc='upper left')
+plt.title('Convolve (FFT) Actual vs. Expected Times')
+plt.xlabel('Observations')
+plt.ylabel('Time (seconds)')
 plt.show()
 
 
