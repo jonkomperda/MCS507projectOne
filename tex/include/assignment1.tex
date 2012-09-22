@@ -32,7 +32,16 @@ The random numbers are generated prior to the execution of the loop based on the
 \end{lstlisting}
 In Listing \ref{lst:mainloop} we iterate over length of the array where \emph{i} is the quantity of samples we wish to take. The object \emph{timed()} is called to zero out the counter and begin counting. The value is not stored as we do not wish to store a zero. We then perform the FFT calculation, and call our timer, \emph{timed()}, once again, this time storing the result to the variable \emph{t}. The times are appended to the list \emph{self.times}, which will be plotted later using \emph{matplotlib}.
 
-
 % subsection method (end)
+\subsection{Results} % (fold)
+\label{fig:resultA}
+
+\begin{figure}[H]
+    \centering
+        \includegraphics[width=6.5in]{./include/assignment1data.png}
+    \caption{Comparison of Actual to Expected Timings}
+    \label{fig:exactvsexpt}
+\end{figure}\noindent
+% subsection results (end)
 
 % section section_name (end)
