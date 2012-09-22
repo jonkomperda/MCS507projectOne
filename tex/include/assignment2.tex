@@ -4,6 +4,12 @@
 \section{Assignment Two: Denoising of Signals} % (fold)
 \label{sec:assignment_two_denoising_of_signals}
 
-In this section we show the ability of the Fast Fourier Transform to filter signals in order to remove unwanted noise. Such denoising may be performed in multiple manners: high pass filtering, low pass filtering, and amplitude filtering.
+In this section we show the ability of the Fast Fourier Transform to filter signals in order to remove unwanted noise. Such denoising may be performed in multiple manners: high pass filtering, low pass filtering, and amplitude filtering. The FFT is applied to a sample wave file of a student's voice with natural background noise as well as added static of high and low amplitudes. We see that to remove background noise amplitude filtering is sufficient, however to remove static of various amplitudes, we must apply high and low pass filters.
+
+\subsection{Method} % (fold)
+\label{sub:method}
+We begin by loading a sample wave file using the scipy 'wavfile' module.
+
+% subsection method (end) 
 
 % section assignment_two_denoising_of_signals (end)

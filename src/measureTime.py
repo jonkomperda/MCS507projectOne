@@ -81,7 +81,7 @@ class assignmentOne():
         writer = csv.writer(open('timings.csv', 'wb'), delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(['Samples,Time'])
         for i in range(len(self.times)):
-            writer.writerow([self.x[i],self.times[i]])
+            writer.writerow([self.x[i],self.times[i],self.expected_adjusted[i]])
         
     
     
@@ -102,7 +102,7 @@ class assignmentOne():
         p0=.001
         W = leastsq(residuals,p0,args=(observed,expected), maxfev=100000, full_output=1)
         
-        self.expected_adjusted = [W[0]*expected[i] for i in range(len(expected))]
+        self.expected_adjusted = [float(W[0]*expected[i]) for i in range(len(expected))]
         
         p1 = plt.plot(self.x,self.times,'b:',label='Actual Times')
         p2 = plt.plot(self.x,self.expected_adjusted,'r--', label='Expected Times')
@@ -121,7 +121,7 @@ if __name__ == '__main__':
     #plt.plot(a.x,a.times)
     #plt.show()
     #a.plotFFT()
-    #a.writeCSV()
+    a.writeCSV()
 
 """
 # Calcuate the raw expected times, then the fitted expected times and plot
