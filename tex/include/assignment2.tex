@@ -64,8 +64,11 @@ In Listing \ref{lst:filter} we see a total of four filters applied. We apply the
 Figure \ref{fig:afterFilt} shows the resulting spectrum after applying filtering. The low pass filter is clearly evident as all frequencies above 10kHz are now zero. Due to the scaling of the plot, the high pass filter is not as clearly evident. The gaps shown in the plot of frequency correspond to amplitude filtered frequencies, or background noise.
 
 Now that filtering has been performed, we apply the inverse real FFT to reconstruct the sound signal.
-
-
 % subsection method (end) 
+\subsection{Results} % (fold)
+\label{sub:results}
+The result of this assignment may be heard in the sound files provided. File \emph{static\_noise\_test.wav} is the initial noisy sound file, whereas \emph{result.wav} is the filtered result. Let it be noted that there is additional noise introduced to the file which makes the voice sound muffled. It was found that the filtering of the FFT on such high amplitudes (such as voice), introduced oscillations into the time domain from the inverse FFT. In order to remedy these issues it would necessary to perform piecewise discontinuous smoothing to dampen the oscillations; this however exceeds the scope of the project.
+
+% subsection results (end)
 
 % section assignment_two_denoising_of_signals (end)
